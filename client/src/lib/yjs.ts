@@ -1,31 +1,30 @@
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import { useEffect, useState } from "react";
-import { YArrayEvent } from "yjs";
+import { proxy } from "valtio";
+import { bind } from "valtio-yjs";
 
 const provider = new HocuspocusProvider({
   url: `ws://${window.location.hostname}:1234`,
   name: "group-chat",
 });
 
-type Message = { userId: string; content: string };
-type MessageHanlder = (event: YArrayEvent<Message>) => void;
+export type UserType = { name: string };
+export const yUsers = proxy<Record<string, UserType>>({});
+bind(yUsers, provider.document.getMap("users"));
 
-const yMessages = provider.document.getArray<Message>("messages");
-export function useMessages() {
-  const [messages, setMessages] = useState<Message[]>([]);
+export type MessageType = {
+  userId: string;
+  content: string;
+  createdAt: number;
+};
+export const yMessages = proxy<MessageType[]>([]);
+bind(yMessages, provider.document.getArray("messages"));
 
-  useEffect(() => {
-    const handler: MessageHanlder = () => {
-      setMessages(yMessages.toArray());
-    };
-
-    yMessages.observe(handler);
-    return () => yMessages.unobserve(handler);
-  }, [messages]);
-
-  const sendMessage = (content: string) => {
-    yMessages.push([{ userId: "1", content }]);
-  };
-
-  return [messages, sendMessage] as const;
+export function setAwareness({
+  userId,
+  name,
+}: {
+  userId: string;
+  name: string;
+}) {
+  provider.setAwarenessField("user", { userId, name });
 }

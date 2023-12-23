@@ -1,21 +1,31 @@
-import { useSnapshot } from "valtio";
-
+import { useEffect, useRef } from "react";
 import { useUser } from "../../lib/user";
-import { MessageType, yMessages, yUsers } from "../../lib/yjs";
+import { MessageType, useMessages, useUsers } from "../../lib/yjs";
+
+// Pin scrolling to bottom
+// https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
 
 export function Messages() {
   const { user } = useUser();
-  const messagesSnap = useSnapshot(yMessages);
+  const $messages = useMessages();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    containerRef.current?.scrollTo(0, containerRef.current.scrollHeight);
+  }, []);
 
   return (
-    <div className="h-full flex flex-col overflow-auto">
-      {messagesSnap.map((message, i) =>
-        message.userId === user.id ? (
-          <MyMessage key={i} message={message} />
-        ) : (
-          <OtherMessage key={i} message={message} />
-        )
-      )}
+    <div className="h-full overflow-y-scroll" ref={containerRef}>
+      <div className="min-h-[calc(100%+1px)] flex flex-col justify-end *:[overflow-anchor:none]">
+        {$messages.map((message, i) =>
+          message.userId === user.id ? (
+            <MyMessage key={i} message={message} />
+          ) : (
+            <OtherMessage key={i} message={message} />
+          )
+        )}
+        <div className="![overflow-anchor:auto] h-[1px]" />
+      </div>
     </div>
   );
 }
@@ -43,8 +53,8 @@ function MyMessage({ message }: { message: MessageType }) {
 }
 
 function OtherMessage({ message }: { message: MessageType }) {
-  const usersSnap = useSnapshot(yUsers);
-  const user = usersSnap[message.userId] ?? { name: "Unknown" };
+  const $users = useUsers();
+  const user = $users[message.userId] ?? { name: "Unknown" };
 
   return (
     <div className="pr-[30%] py-2">

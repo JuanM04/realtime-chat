@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import { useUser } from "../../lib/user";
+import { yMessages } from "../../lib/yjs";
 
 export function Settings() {
-  const { user, updateSettings } = useUser();
+  const { user, updateSettings, logout } = useUser();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -30,7 +31,7 @@ export function Settings() {
       </button>
 
       <dialog
-        className="bg-white rounded-xl w-72 backdrop:bg-black/50"
+        className="bg-white rounded-xl max-w-72 backdrop:bg-black/50"
         ref={dialogRef}
         onClick={(ev) => {
           const dialog = ev.currentTarget;
@@ -84,11 +85,35 @@ export function Settings() {
             required
             defaultValue={user.name}
           />
+
+          <div className="flex items-center justify-between mt-2">
+            <button
+              className="text-red-500 font-semibold mx-2"
+              onClick={(e) => {
+                e.preventDefault();
+                logout();
+              }}
+            >
+              Logout
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white rounded-lg font-semibold px-2 py-1"
+            >
+              Save settings
+            </button>
+          </div>
+
           <button
-            type="submit"
-            className="bg-blue-500 text-white rounded-lg font-semibold px-2 py-1 mt-8"
+            className="bg-black text-white rounded-lg font-semibold px-2 py-1 mt-8"
+            onClick={(e) => {
+              e.preventDefault();
+              while (yMessages.length > 0) {
+                yMessages.pop();
+              }
+            }}
           >
-            Save settings
+            Clear chat
           </button>
         </form>
       </dialog>

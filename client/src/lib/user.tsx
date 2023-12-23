@@ -23,7 +23,7 @@ export function useUser() {
     // setAwareness(user);
   }, []);
 
-  const updateName = useCallback((name: string) => {
+  const updateSettings = useCallback(({ name }: { name: string }) => {
     if (!user.id) return;
     user.name = yUsers[user.id].name = name;
     // setAwareness(user);
@@ -36,5 +36,5 @@ export function useUser() {
     // setAwareness(user);
   }, []);
 
-  return { user: useSnapshot(user), login, updateName, logout };
+  return { user: useSnapshot(user), login, updateSettings, logout };
 }

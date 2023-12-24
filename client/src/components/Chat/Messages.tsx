@@ -36,7 +36,7 @@ function MyMessage({ message }: { message: Message }) {
   return (
     <div className="pl-[30%] py-2">
       <div className="flex justify-end items-end">
-        <p className="text-lg text-right leading-tight text-black rounded-xl rounded-br-none bg-gray-300 px-4 py-2">
+        <p className="max-w-[calc(100%-12px)] break-words text-lg text-right leading-tight text-black rounded-xl rounded-br-none bg-gray-300 px-4 py-2">
           {message.content}
         </p>
         <svg
@@ -68,7 +68,7 @@ function OtherMessage({ message }: { message: Message }) {
         >
           <path d="M 3 3 V 0 C 3 1 1 3 0 3" className="fill-blue-500" />
         </svg>
-        <p className="text-lg text-left leading-tight text-white rounded-xl rounded-bl-none bg-blue-500 px-4 py-2">
+        <p className="max-w-[calc(100%-12px)] break-words text-lg text-left leading-tight text-white rounded-xl rounded-bl-none bg-blue-500 px-4 py-2">
           {message.content}
         </p>
       </div>

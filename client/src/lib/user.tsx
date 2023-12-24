@@ -13,7 +13,7 @@ import type {
 import { proxy, useSnapshot } from "valtio";
 
 import { sendApi } from "./api";
-import { useUsers } from "./yjs";
+import { useUsers, yProvider } from "./yjs";
 
 const user = proxy<{ id: string | null }>({ id: null });
 
@@ -28,16 +28,15 @@ export function useUser() {
 export async function login(name: string) {
   const res = await sendApi<LoginQuery>("login", { name });
   user.id = res.userId;
-  // setAwareness(user);
+  yProvider.setAwarenessField("userId", res.userId);
 }
 
 export async function updateSettings({ name }: { name: string }) {
   await sendApi<UpdateUserQuery>("update-user", { userId: user.id!, name });
-  // setAwareness(user);
 }
 
 export async function logout() {
   await sendApi<LogoutQuery>("logout", { userId: user.id! });
   user.id = null;
-  // setAwareness(user);
+  yProvider.setAwarenessField("userId", null);
 }

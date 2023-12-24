@@ -10,25 +10,15 @@ import {
 import { proxy, useSnapshot } from "valtio";
 import { bind } from "valtio-yjs";
 
-const provider = new HocuspocusProvider({
+export const yProvider = new HocuspocusProvider({
   url: `ws://${window.location.hostname}:${PORT}`,
   name: DOCUMENT_NAME,
 });
 
 const yUsers = proxy<Record<string, UserData>>({});
-bind(yUsers, provider.document.getMap(USER_DATA_NAME));
+bind(yUsers, yProvider.document.getMap(USER_DATA_NAME));
 export const useUsers = () => useSnapshot(yUsers);
 
 const yMessages = proxy<Message[]>([]);
-bind(yMessages, provider.document.getArray(MESSAGES_NAME));
+bind(yMessages, yProvider.document.getArray(MESSAGES_NAME));
 export const useMessages = () => useSnapshot(yMessages);
-
-export function setAwareness({
-  userId,
-  name,
-}: {
-  userId: string;
-  name: string;
-}) {
-  provider.setAwarenessField("user", { userId, name });
-}

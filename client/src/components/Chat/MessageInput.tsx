@@ -2,6 +2,7 @@ import type { MessageQuery } from "@realtime-chat/shared";
 import { sendApi } from "../../lib/api";
 import { useUser } from "../../lib/user";
 import { useRef } from "react";
+import { yProvider } from "../../lib/yjs";
 
 export function MessageInput() {
   const user = useUser()!;
@@ -27,6 +28,7 @@ export function MessageInput() {
           });
           textarea.value = "";
           resizeTextarea();
+          yProvider.setAwarenessField("typing", "");
         }
       }}
     >
@@ -37,7 +39,10 @@ export function MessageInput() {
         required
         rows={1}
         ref={textareaRef}
-        onChange={resizeTextarea}
+        onChange={(e) => {
+          resizeTextarea();
+          yProvider.setAwarenessField("typing", e.target.value);
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();

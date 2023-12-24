@@ -5,11 +5,14 @@ export async function sendApi<Query extends [unknown, { success: boolean }]>(
   data: Query[0]
 ) {
   try {
-    const res = await fetch(`http://localhost:${PORT}/api/${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).then((res) => res.json());
+    const res = await fetch(
+      `http://${window.location.hostname}:${PORT}/api/${endpoint}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    ).then((res) => res.json());
 
     if (!res.success) {
       throw new Error(res.error);

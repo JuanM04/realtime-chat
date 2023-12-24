@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 
 import { useUser } from "../../lib/user";
 import { useMessages, useUsers } from "../../lib/yjs";
+import { TypingIndicator } from "./TypingIndicator";
 
 // Pin scrolling to bottom
 // https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
@@ -26,6 +27,7 @@ export function Messages() {
             <OtherMessage key={i} message={message} />
           )
         )}
+        <TypingIndicator />
         <div className="![overflow-anchor:auto] h-[1px]" />
       </div>
     </div>

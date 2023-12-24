@@ -5,13 +5,26 @@
     "dev": "tsx watch ./main.ts"
   },
   "dependencies": {
+    "@hocuspocus/extension-database": "^2.8.1",
     "@hocuspocus/extension-logger": "^2.8.1",
     "@hocuspocus/server": "^2.8.1",
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^12.0.1",
+    "@realtime-chat/shared": "workspace:^",
+    "koa": "^2.14.2",
+    "koa-body": "^6.0.1",
+    "koa-easy-ws": "^2.1.0",
+    "nanoid": "^5.0.4",
+    "ws": "^8.15.1",
     "y-protocols": "^1.0.6",
     "yjs": "^13.6.10"
   },
   "devDependencies": {
+    "@types/koa": "^2.13.12",
+    "@types/koa__cors": "^4.0.3",
+    "@types/koa__router": "^12.0.4",
     "@types/node": "^20.10.5",
+    "@types/ws": "^8.5.10",
     "tsx": "^4.7.0",
     "typescript": "~5.3.3"
   }

@@ -1,13 +1,15 @@
+import type { Message } from "@realtime-chat/shared";
 import { useEffect, useRef } from "react";
+
 import { useUser } from "../../lib/user";
-import { MessageType, useMessages, useUsers } from "../../lib/yjs";
+import { useMessages, useUsers } from "../../lib/yjs";
 
 // Pin scrolling to bottom
 // https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
 
 export function Messages() {
-  const { user } = useUser();
-  const $messages = useMessages();
+  const user = useUser()!;
+  const messages = useMessages();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export function Messages() {
   return (
     <div className="h-full overflow-y-scroll" ref={containerRef}>
       <div className="min-h-[calc(100%+1px)] flex flex-col justify-end *:[overflow-anchor:none]">
-        {$messages.map((message, i) =>
+        {messages.map((message, i) =>
           message.userId === user.id ? (
             <MyMessage key={i} message={message} />
           ) : (
@@ -30,7 +32,7 @@ export function Messages() {
   );
 }
 
-function MyMessage({ message }: { message: MessageType }) {
+function MyMessage({ message }: { message: Message }) {
   return (
     <div className="pl-[30%] py-2">
       <div className="flex justify-end items-end">
@@ -52,9 +54,9 @@ function MyMessage({ message }: { message: MessageType }) {
   );
 }
 
-function OtherMessage({ message }: { message: MessageType }) {
-  const $users = useUsers();
-  const user = $users[message.userId] ?? { name: "Unknown" };
+function OtherMessage({ message }: { message: Message }) {
+  const users = useUsers();
+  const user = users[message.userId] ?? { name: "Unknown" };
 
   return (
     <div className="pr-[30%] py-2">

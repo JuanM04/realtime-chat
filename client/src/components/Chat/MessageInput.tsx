@@ -1,24 +1,24 @@
+import type { MessageQuery } from "@realtime-chat/shared";
+import { sendApi } from "../../lib/api";
 import { useUser } from "../../lib/user";
-import { yMessages } from "../../lib/yjs";
 
 export function MessageInput() {
-  const { user } = useUser();
+  const user = useUser()!;
 
   return (
     <form
       className="flex items-center border-t border-gray-400 px-4 py-2 gap-4"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
         const message = form.get("message")?.toString();
         if (message && user.id) {
-          yMessages.push({
+          e.currentTarget.reset();
+          await sendApi<MessageQuery>("send-message", {
             userId: user.id,
             content: message,
-            createdAt: Date.now(),
           });
         }
-        e.currentTarget.reset();
       }}
     >
       <input

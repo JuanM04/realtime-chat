@@ -1,9 +1,11 @@
+import type { ClearChatQuery } from "@realtime-chat/shared";
 import { useRef } from "react";
-import { useUser } from "../../lib/user";
-import { yMessages } from "../../lib/yjs";
+
+import { sendApi } from "../../lib/api";
+import { useUser, updateSettings, logout } from "../../lib/user";
 
 export function Settings() {
-  const { user, updateSettings, logout } = useUser();
+  const user = useUser()!;
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -106,11 +108,9 @@ export function Settings() {
 
           <button
             className="bg-black text-white rounded-lg font-semibold px-2 py-1 mt-8"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              while (yMessages.length > 0) {
-                yMessages.pop();
-              }
+              await sendApi<ClearChatQuery>("clear-chat", {});
             }}
           >
             Clear chat

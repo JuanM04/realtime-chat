@@ -1,26 +1,27 @@
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import { proxy } from "valtio";
+import {
+  DOCUMENT_NAME,
+  MESSAGES_NAME,
+  PORT,
+  USER_DATA_NAME,
+  type Message,
+  type UserData,
+} from "@realtime-chat/shared";
+import { proxy, useSnapshot } from "valtio";
 import { bind } from "valtio-yjs";
-import { useProxy } from "valtio/utils";
 
 const provider = new HocuspocusProvider({
-  url: `ws://${window.location.hostname}:1234`,
-  name: "group-chat",
+  url: `ws://${window.location.hostname}:${PORT}`,
+  name: DOCUMENT_NAME,
 });
 
-export type UserType = { name: string };
-export const yUsers = proxy<Record<string, UserType>>({});
-bind(yUsers, provider.document.getMap("users"));
-export const useUsers = () => useProxy(yUsers);
+const yUsers = proxy<Record<string, UserData>>({});
+bind(yUsers, provider.document.getMap(USER_DATA_NAME));
+export const useUsers = () => useSnapshot(yUsers);
 
-export type MessageType = {
-  userId: string;
-  content: string;
-  createdAt: number;
-};
-export const yMessages = proxy<MessageType[]>([]);
-bind(yMessages, provider.document.getArray("messages"));
-export const useMessages = () => useProxy(yMessages);
+const yMessages = proxy<Message[]>([]);
+bind(yMessages, provider.document.getArray(MESSAGES_NAME));
+export const useMessages = () => useSnapshot(yMessages);
 
 export function setAwareness({
   userId,

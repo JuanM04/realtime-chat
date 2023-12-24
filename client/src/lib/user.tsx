@@ -5,36 +5,39 @@
  * This may be replaced with a more robust authentication system.
  */
 
-import { nanoid } from "nanoid";
-import { useCallback } from "react";
+import type {
+  LoginQuery,
+  LogoutQuery,
+  UpdateUserQuery,
+} from "@realtime-chat/shared";
 import { proxy, useSnapshot } from "valtio";
-import { yUsers } from "./yjs";
 
-type User = { id: string | null; name: string };
-const user = proxy<User>({ id: null, name: "" });
+import { sendApi } from "./api";
+import { useUsers } from "./yjs";
+
+const user = proxy<{ id: string | null }>({ id: null });
 
 export function useUser() {
-  // const user = useSnapshot(userState);
+  const { id } = useSnapshot(user);
+  const users = useUsers();
 
-  const login = useCallback((name: string) => {
-    user.id = nanoid();
-    user.name = name;
-    yUsers[user.id] = user;
-    // setAwareness(user);
-  }, []);
+  if (id && users[id]) return { id, ...users[id] };
+  else return null;
+}
 
-  const updateSettings = useCallback(({ name }: { name: string }) => {
-    if (!user.id) return;
-    user.name = yUsers[user.id].name = name;
-    // setAwareness(user);
-  }, []);
+export async function login(name: string) {
+  const res = await sendApi<LoginQuery>("login", { name });
+  user.id = res.userId;
+  // setAwareness(user);
+}
 
-  const logout = useCallback(() => {
-    if (!user.id) return;
-    delete yUsers[user.id];
-    user.id = null;
-    // setAwareness(user);
-  }, []);
+export async function updateSettings({ name }: { name: string }) {
+  await sendApi<UpdateUserQuery>("update-user", { userId: user.id!, name });
+  // setAwareness(user);
+}
 
-  return { user: useSnapshot(user), login, updateSettings, logout };
+export async function logout() {
+  await sendApi<LogoutQuery>("logout", { userId: user.id! });
+  user.id = null;
+  // setAwareness(user);
 }

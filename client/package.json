@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.8.1",
-    "nanoid": "^5.0.4",
+    "@realtime-chat/shared": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "valtio": "^1.12.1",

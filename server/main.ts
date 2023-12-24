@@ -1,26 +1,25 @@
-import { Hocuspocus } from "@hocuspocus/server";
-import { Logger } from "@hocuspocus/extension-logger";
-import { Doc } from "yjs";
+import cors from "@koa/cors";
+import Koa from "koa";
+import websocket from "koa-easy-ws";
+import type WebSocket from "ws";
 
-const documents = new Map<string, Doc>();
+import { hocuspocus } from "./hocuspocus";
+import { router } from "./routes";
+import { PORT } from "@realtime-chat/shared";
 
-const server = new Hocuspocus({
-  port: 1234,
-  extensions: [new Logger()],
-  debounce: 0,
-  async onStoreDocument(data) {
-    documents.set(data.documentName, data.document);
-  },
+const app = new Koa();
 
-  async onLoadDocument(data): Promise<Doc> {
-    if (documents.has(data.documentName)) {
-      return documents.get(data.documentName)!;
-    } else {
-      const doc = new Doc();
-      documents.set(data.documentName, doc);
-      return doc;
-    }
-  },
+app
+  .use(cors())
+  .use(websocket())
+  .use(router.routes())
+  .use(router.allowedMethods());
+
+app.use(async (ctx) => {
+  if (ctx.ws) {
+    const ws = (await ctx.ws()) as WebSocket;
+    hocuspocus.handleConnection(ws, ctx.req);
+  }
 });
 
-server.listen();
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));

@@ -8,6 +8,7 @@ export function MessageInput() {
   const user = useUser()!;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Trick to resize the textarea to fit its content.
   const resizeTextarea = () => {
     const textarea = textareaRef.current;
     if (!textarea) return;

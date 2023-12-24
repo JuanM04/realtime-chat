@@ -1,11 +1,17 @@
+/**
+ * @fileoverview
+ * API endpoints for the server.
+ *
+ * Most of these are placeholders for now, but they're here to show how the
+ * server would handle requests from the client with auth, validation, etc.
+ */
+
 import Router from "@koa/router";
 import {
   ClearChatRequest,
   ClearChatResponse,
-  DOCUMENT_NAME,
   LoginRequest,
   LoginResponse,
-  LogoutRequest,
   LogoutResponse,
   MessageRequest,
   MessageResponse,

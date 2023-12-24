@@ -1,3 +1,12 @@
+/**
+ * @fileoverview
+ * Main entrypoint for the server. This file is responsible for setting up the
+ * server and handling incoming connections.
+ *
+ * It uses Koa as the webserver, and koa-easy-ws to handle websocket connections,
+ * then passed to Hocuspocus to handle the actual logic.
+ */
+
 import cors from "@koa/cors";
 import Koa from "koa";
 import websocket from "koa-easy-ws";

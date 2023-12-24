@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * Yjs-related code.
+ */
+
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import {
   DOCUMENT_NAME,

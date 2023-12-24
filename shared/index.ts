@@ -1,3 +1,13 @@
+/**
+ * @fileoverview
+ * Here we define the types and endpoints that are shared between the client and
+ * server. This file is imported by both the client and server, so we can be
+ * sure that the types and endpoints are always in sync.
+ *
+ * Part of this could be replaced by a library like tRPC to support more
+ * endpoints with minimal boilerplate.
+ */
+
 import { z } from "zod";
 
 // Types

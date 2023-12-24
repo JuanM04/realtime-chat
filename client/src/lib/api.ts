@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * Simple wrapper around fetch to send requests to the server.
+ */
+
 import { PORT } from "@realtime-chat/shared";
 
 export async function sendApi<Query extends [unknown, { success: boolean }]>(

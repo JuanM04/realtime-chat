@@ -1,3 +1,11 @@
+/**
+ * @fileoverview
+ * Hocuspocus-related code.
+ *
+ * The variable `mainDocument` acts as a database. In a real app, this would be
+ * a real database like Postgres or MongoDB.
+ */
+
 import { Database } from "@hocuspocus/extension-database";
 import { Logger } from "@hocuspocus/extension-logger";
 import { Hocuspocus } from "@hocuspocus/server";
